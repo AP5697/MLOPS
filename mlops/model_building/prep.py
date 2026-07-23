@@ -1,12 +1,10 @@
 # for data manipulation
 import pandas as pd
-import sklearn
-# for creating a folder
 import os
-# for data preprocessing and pipeline creation
 from sklearn.model_selection import train_test_split
-# for hugging face space authentication to upload files
-from huggingface_hub import hf_hub_download
+from huggingface_hub import hf_hub_download, HfApi
+
+api = HfApi(token=os.getenv("HF_TOKEN"))
 
 dataset_path = hf_hub_download(
     repo_id="Aishawarya/Bank-Customer-churn",
@@ -16,7 +14,7 @@ dataset_path = hf_hub_download(
 )
 
 bank_dataset = pd.read_csv(dataset_path)
-
+print("Dataset loaded successfully.")
 # Define the target variable for the classification task
 target = 'Exited'
 
