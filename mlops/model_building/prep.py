@@ -6,13 +6,16 @@ import os
 # for data preprocessing and pipeline creation
 from sklearn.model_selection import train_test_split
 # for hugging face space authentication to upload files
-from huggingface_hub import login, HfApi
+from huggingface_hub import hf_hub_download
 
-# Define constants for the dataset and output paths
-api = HfApi(token=os.getenv("HF_TOKEN"))
-DATASET_PATH = "hf://datasets/Aishwarya/bank-customer-churn"
-bank_dataset = pd.read_csv(DATASET_PATH)
-print("Dataset loaded successfully.")
+dataset_path = hf_hub_download(
+    repo_id="Aishawarya/Bank-Customer-churn",
+    filename="bank_customer_churn.csv",
+    repo_type="dataset",
+    token=os.getenv("HF_TOKEN"),
+)
+
+bank_dataset = pd.read_csv(dataset_path)
 
 # Define the target variable for the classification task
 target = 'Exited'
@@ -55,12 +58,13 @@ ytrain.to_csv("ytrain.csv",index=False)
 ytest.to_csv("ytest.csv",index=False)
 
 
-files = ["Xtrain.csv","Xtest.csv","ytrain.csv","ytest.csv"]
+files = ["Xtrain.csv", "Xtest.csv", "ytrain.csv", "ytest.csv"]
 
 for file_path in files:
     api.upload_file(
         path_or_fileobj=file_path,
-        path_in_repo=file_path.split("/")[-1],  # just the filename
-        repo_id="jpaggarwal/bank-customer-churn",
+        path_in_repo=file_path,
+        repo_id="Aishawarya/Bank-Customer-churn",
         repo_type="dataset",
+    
     )
